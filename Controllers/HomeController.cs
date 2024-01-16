@@ -11,9 +11,18 @@ namespace ContosoUniversity.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly ContosoUniversityContext _context;
+        //private readonly ContosoUniversityContext _context;
 
-        public HomeController(ILogger<HomeController> logger, ContosoUniversityContext context)
+
+        //public HomeController(ILogger<HomeController> logger, ContosoUniversityContext context)
+        //{
+        //    _logger = logger;
+        //    _context = context;
+        //}
+        private readonly SchoolContext _context;
+
+
+        public HomeController(ILogger<HomeController> logger, SchoolContext context)
         {
             _logger = logger;
             _context = context;
@@ -31,7 +40,7 @@ namespace ContosoUniversity.Controllers
         public async Task<ActionResult> About()
         {
             IQueryable<EnrollmentDateGroup> data =
-                from student in _context.Student
+                from student in _context.Students
                 group student by student.EnrollmentDate into dateGroup
                 select new EnrollmentDateGroup()
                 {

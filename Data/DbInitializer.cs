@@ -8,6 +8,7 @@ namespace ContosoUniversity.Data
 {
     public static class DbInitializer
     {
+
         public static void Initialize(SchoolContext context)
         {
             //context.Database.EnsureCreated();

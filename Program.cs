@@ -6,20 +6,32 @@ using ContosoUniversity.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<ContosoUniversityContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("ContosoUniversityContext")));
+//builder.Services.AddDbContext<ContosoUniversityContext>(options =>
+//    options.UseSqlite(builder.Configuration.GetConnectionString("ContosoUniversityContext")));
+
+builder.Services.AddDbContext<SchoolContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("SchoolContext")));
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
+//using (var scope = app.Services.CreateScope())
+//{
+//    var services = scope.ServiceProvider;
+
+//    SeedData.Initialize(services);
+//}
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
 
-    SeedData.Initialize(services);
+    var context = services.GetRequiredService<SchoolContext>();
+    DbInitializer.Initialize(context);
 }
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
