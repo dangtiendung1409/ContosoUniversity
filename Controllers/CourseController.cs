@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,9 +22,10 @@ namespace ContosoUniversity.Controllers
         // GET: Course
         public async Task<IActionResult> Index()
         {
-              return _context.Courses != null ? 
-                          View(await _context.Courses.ToListAsync()) :
-                          Problem("Entity set 'ContosoUniversityContext.Course'  is null.");
+            var courses = _context.Courses
+                .Include(c => c.Department)
+                .AsNoTracking();
+            return View(await courses.ToListAsync());
         }
 
         // GET: Course/Details/5
@@ -150,14 +151,14 @@ namespace ContosoUniversity.Controllers
             {
                 _context.Courses.Remove(course);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool CourseExists(int id)
         {
-          return (_context.Courses?.Any(e => e.CourseID == id)).GetValueOrDefault();
+            return (_context.Courses?.Any(e => e.CourseID == id)).GetValueOrDefault();
         }
     }
 }
